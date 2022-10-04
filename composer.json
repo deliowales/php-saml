@@ -1,5 +1,5 @@
 {
-    "name": "deliowales/php-saml",
+    "name": "onelogin/php-saml",
     "description": "OneLogin PHP SAML Toolkit",
     "license": "MIT",
     "homepage": "https://developers.onelogin.com/saml/php",
