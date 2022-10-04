@@ -120,30 +120,33 @@ ISPASSIVE;
         }
 
         $requestedAuthnStr = '';
-        if (isset($security['requestedAuthnContext']) && $security['requestedAuthnContext'] !== false) {
-            $authnComparison = 'exact';
-            if (isset($security['requestedAuthnContextComparison'])) {
-                $authnComparison = $security['requestedAuthnContextComparison'];
-            }
 
-            $authnComparisonAttr = '';
-            if (!empty($authnComparison)) {
-                $authnComparisonAttr = sprintf('Comparison="%s"', $authnComparison);
-            }
+        if (isset($security['hasAuthnContext']) && $security['hasAuthnContext'] === true) {
+            if (isset($security['requestedAuthnContext']) && $security['requestedAuthnContext'] !== false) {
+                $authnComparison = 'exact';
+                if (isset($security['requestedAuthnContextComparison'])) {
+                    $authnComparison = $security['requestedAuthnContextComparison'];
+                }
 
-            if ($security['requestedAuthnContext'] === true) {
-                $requestedAuthnStr = <<<REQUESTEDAUTHN
+                $authnComparisonAttr = '';
+                if (!empty($authnComparison)) {
+                    $authnComparisonAttr = sprintf('Comparison="%s"', $authnComparison);
+                }
+
+                if ($security['requestedAuthnContext'] === true) {
+                    $requestedAuthnStr = <<<REQUESTEDAUTHN
 
     <samlp:RequestedAuthnContext $authnComparisonAttr>
         <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
     </samlp:RequestedAuthnContext>
 REQUESTEDAUTHN;
-            } else {
-                $requestedAuthnStr .= "    <samlp:RequestedAuthnContext $authnComparisonAttr>\n";
-                foreach ($security['requestedAuthnContext'] as $contextValue) {
-                    $requestedAuthnStr .= "        <saml:AuthnContextClassRef>".$contextValue."</saml:AuthnContextClassRef>\n";
+                } else {
+                    $requestedAuthnStr .= "    <samlp:RequestedAuthnContext $authnComparisonAttr>\n";
+                    foreach ($security['requestedAuthnContext'] as $contextValue) {
+                        $requestedAuthnStr .= "        <saml:AuthnContextClassRef>".$contextValue."</saml:AuthnContextClassRef>\n";
+                    }
+                    $requestedAuthnStr .= '    </samlp:RequestedAuthnContext>';
                 }
-                $requestedAuthnStr .= '    </samlp:RequestedAuthnContext>';
             }
         }
 
